@@ -1,0 +1,125 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>某某中学就寝未归人员报表导出</title>
+    <link href="//unpkg.com/layui@2.9.14/dist/css/layui.css" rel="stylesheet">
+    <script src="//unpkg.com/layui@2.9.14/dist/layui.js"></script>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            background-color: #23292e;
+            color: white;
+            box-sizing: border-box;
+        }
+        .centered {
+            text-align: center;
+            width: 100%;
+        }
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        h4 {
+            font-size: 1rem;
+            margin: 1rem 0;
+        }
+        .layui-form {
+            width: 100%;
+        }
+        .layui-input-wrap {
+            width: 100%;
+            margin: 1rem 0;
+        }
+        .layui-input {
+            width: 100%;
+        }
+        .layui-btn {
+            width: 100%;
+        }
+        .zhong {
+            position: fixed;
+            top: 59%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .red {
+            color: #ff5722;
+        }
+        .bule {
+            color: #16b777;
+        }
+    </style>
+
+</head>
+<body>
+    <div class="centered">
+        <h1 class="bule">某某中学就寝未归人员报表导出</h1>
+        <div id="clock"></div>
+        <h4 class="red">注意:本网站仅能导出当前的名单,如现在是午休就只能导出今天午休的未归名单</h4>
+        <div class="layui-form">
+            <form id="ye" method="post" action="{% url 'index' %}">
+                {% csrf_token %}
+                <div>
+                    <input type="checkbox" value="高一" name="grade" title="高一" lay-skin="tag" />
+                    <input type="checkbox" value="高二" name="grade" title="高二" lay-skin="tag" />
+                    <input type="checkbox" value="高三" name="grade" title="高三" lay-skin="tag" />
+                </div>
+                <div class="layui-input-wrap">
+                    <input type="password" lay-affix="eye" id="passwd" name="passwd" placeholder="请输入神秘的代码" class="layui-input">
+                </div>
+                <button type="button" id="submit-button" class="layui-btn layui-btn-fluid" lay-on="test-load-4">下载报表</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        function updateTime() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            const formattedTime = `当前时间: ${hours}:${minutes}:${seconds}`;
+            document.getElementById('clock').textContent = formattedTime;
+        }
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            updateTime();
+            setInterval(updateTime, 1000);
+
+            const form = document.getElementById('ye');
+            const submitButton = document.getElementById('submit-button');
+
+            submitButton.addEventListener('click', function(event) {
+                event.preventDefault();  // 阻止默认的表单提交行为
+                form.submit();  // 手动提交表单
+            });
+        });
+        layui.use(function(){
+        var layer = layui.layer;
+        var util = layui.util;
+
+  // 事件
+        util.on('lay-on', {
+            'test-load-4': function(){
+            var loadIndex = layer.msg('正在导出....', {
+                icon: 16,
+                shade: 0.5
+            });;
+			setTimeout(function(){
+				layer.close(loadIndex)
+			}, 420000);
+            }
+        })
+    });
+    </script>
+</body>
+</html>

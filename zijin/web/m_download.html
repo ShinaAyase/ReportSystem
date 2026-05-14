@@ -1,0 +1,58 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>某某中学就寝未归人员报表导出</title>
+    <link rel="stylesheet" type="text/css" href="//unpkg.com/layui@2.6.8/dist/css/layui.css">
+    <script type="text/javascript" src="//unpkg.com/layui@2.6.8/dist/css/layui.js"></script>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #23292e; 
+            color: white; 
+            font-size: 16px;
+        }
+        .centered {
+            text-align: center;
+            padding: 20px;
+            width: 90%;
+            max-width: 480px;
+        }
+        h1 {
+            font-size: 1.5em;
+            margin-bottom: 1em;
+        }
+        .download-btn {
+            width: 100%;
+            margin-top: 2em;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="centered">
+        <h1>如未自动下载请点击下面按钮进行下载</h1>
+        <button type="button" class="layui-btn layui-btn-fluid download-btn" onclick="downloadFile()">
+            下载
+        </button>
+    </div>
+
+    <script type="text/javascript">
+        function downloadFile() {
+            window.location.href = "{% url 'download_file' %}";
+        }
+        
+        window.onload = function() {
+            setTimeout(function() {
+                window.location.href = "{% url 'download_file' %}";
+            }, 1000);
+        };
+    </script>
+</body>
+</html>
